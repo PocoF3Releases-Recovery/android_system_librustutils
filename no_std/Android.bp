@@ -7,3 +7,13 @@ rust_library_rlib {
     srcs: ["panic_abort.rs"],
     no_stdlibs: true,
 }
+
+rust_library_rlib {
+    name: "liblibc_alloc_rust",
+    crate_name: "libc_alloc",
+    defaults: ["rust_sysroot_defaults"],
+    host_supported: false,
+    sysroot: false,
+    srcs: ["libc_alloc.rs"],
+    no_stdlibs: true,
+}
