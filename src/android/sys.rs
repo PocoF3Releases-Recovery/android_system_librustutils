@@ -30,7 +30,7 @@ unsafe extern "C" {
     /// and stack protection is enabled, the program will crash.
     ///
     /// See: https://cs.android.com/android/platform/superproject/main/+/main:bionic/libc/bionic/__libc_init_main_thread.cpp;l=104
-    pub(crate) safe fn android_reset_stack_guards();
+    pub safe fn android_reset_stack_guards();
 
     /// Apply Android's application seccomp filters
     #[link_name = "_Z22set_app_seccomp_filterv"]
