@@ -1,0 +1,19 @@
+rust_library_rlib {
+    name: "libbionic_panic_abort",
+    crate_name: "bionic_panic_abort",
+    defaults: ["rust_sysroot_defaults"],
+    host_supported: false,
+    sysroot: false,
+    srcs: ["panic_abort.rs"],
+    no_stdlibs: true,
+}
+
+rust_library_rlib {
+    name: "liblibc_alloc_rust",
+    crate_name: "libc_alloc",
+    defaults: ["rust_sysroot_defaults"],
+    host_supported: false,
+    sysroot: false,
+    srcs: ["libc_alloc.rs"],
+    no_stdlibs: true,
+}
