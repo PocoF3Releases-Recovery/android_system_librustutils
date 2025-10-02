@@ -12,7 +12,6 @@ rust_defaults {
         android: {
             rustlibs: [
                 "libcutils_bindgen",
-                "libbionic_bindgen",
                 "libsystem_properties_bindgen_sys",
             ],
         },
@@ -132,36 +131,6 @@ rust_bindgen {
         "AID_SYSTEM",
         "--allowlist-var",
         "AID_USER_OFFSET",
-    ],
-    product_available: true,
-    vendor_available: true,
-    apex_available: [
-        "//apex_available:platform",
-        "//apex_available:anyapex",
-    ],
-    min_sdk_version: "29",
-}
-
-rust_bindgen {
-    name: "libbionic_bindgen",
-    crate_name: "bionic_bindgen",
-    edition: "2024",
-    host_supported: false,
-
-    wrapper_src: "bindgen/bionic.hpp",
-    source_stem: "bindings",
-    header_libs: [
-        "bionic_libc_platform_headers",
-    ],
-    bindgen_flags: [
-        "--default-enum-style rust",
-
-        "--allowlist-function",
-        "android_fdsan_get_error_level",
-        "--allowlist-function",
-        "android_fdsan_set_error_level",
-        "--allowlist-function",
-        "android_mallopt",
     ],
     product_available: true,
     vendor_available: true,
