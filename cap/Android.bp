@@ -1,0 +1,97 @@
+//
+// Copyright (C) 2025 The Android Open-Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package {
+    default_team: "trendy_team_android_rust",
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+rust_defaults {
+    name: "libcap_rust.defaults",
+    crate_name: "cap",
+    edition: "2024",
+    host_supported: true,
+
+    srcs: ["src/lib.rs"],
+    rustlibs: [
+        "libbitflags",
+        "libcap_bindgen",
+        "liblibc",
+        "libnix",
+        "libscopeguard",
+        "libthiserror",
+    ],
+    shared_libs: [
+        "libcap",
+    ],
+
+    product_available: true,
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.adbd",
+        "com.android.art",
+        "com.android.art.debug",
+        "com.android.compos",
+        "com.android.media.swcodec",
+        "com.android.virt",
+    ],
+}
+
+rust_bindgen {
+    name: "libcap_bindgen",
+    crate_name: "cap_bindgen",
+    edition: "2024",
+    host_supported: true,
+
+    wrapper_src: "bindgen/libcap.h",
+    source_stem: "bindings",
+    shared_libs: ["libcap"],
+    bindgen_flags: [
+        "--default-enum-style rust",
+    ],
+
+    product_available: true,
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.adbd",
+        "com.android.art",
+        "com.android.art.debug",
+        "com.android.compos",
+        "com.android.media.swcodec",
+        "com.android.virt",
+    ],
+}
+
+rust_test {
+    name: "libcap_bindgen_test",
+    srcs: [":libcap_bindgen"],
+    defaults: ["avf_build_flags_rust"],
+    crate_name: "cap_bindgen_test",
+    test_suites: ["general-tests"],
+    auto_gen_config: true,
+    clippy_lints: "none",
+    lints: "none",
+}
+
+rust_library {
+    name: "libcap_rust",
+    defaults: ["libcap_rust.defaults"],
+}
+
+rust_test {
+    name: "libcap_rust.test",
+    defaults: ["libcap_rust.defaults"],
+    test_suites: ["general-tests"],
+}
