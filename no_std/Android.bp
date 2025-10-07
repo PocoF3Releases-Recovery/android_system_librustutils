@@ -17,3 +17,38 @@ rust_library_rlib {
     srcs: ["libc_alloc.rs"],
     no_stdlibs: true,
 }
+
+// Apply this default if your normal C library or binary
+// (not linker, libc, or baremetal) depends on only `no_std` Rust modules.
+// If linker / libc / baremetal, depend on the two libraries above as
+// appropriate.
+cc_defaults {
+    name: "rust_static_std",
+    target: {
+        android: {
+            whole_static_libs: [
+                "libstd",
+            ],
+        },
+        linux_musl: {
+            whole_static_libs: [
+                "libstd",
+            ],
+        },
+        darwin_arm64: {
+            whole_static_libs: [
+                "libstd",
+            ],
+        },
+        glibc: {
+            whole_static_libs: [
+                "prebuilt_libstd",
+            ],
+        },
+        darwin_x86_64: {
+            whole_static_libs: [
+                "prebuilt_libstd",
+            ],
+        },
+    },
+}
