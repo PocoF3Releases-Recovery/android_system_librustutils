@@ -22,7 +22,8 @@ use thiserror::Error;
 use crate::android::sys;
 
 pub use crate::android::sys::{
-    set_app_seccomp_filter, set_app_zygote_seccomp_filter, set_system_seccomp_filter,
+    install_setuidgid_seccomp_filter, set_app_seccomp_filter, set_app_zygote_seccomp_filter,
+    set_system_seccomp_filter,
 };
 pub use bionic_bindgen::android_fdsan_error_level as FDSanErrorLevel;
 

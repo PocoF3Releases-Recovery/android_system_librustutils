@@ -43,4 +43,9 @@ unsafe extern "C" {
     /// Apply Android's system seccomp filters
     #[link_name = "_Z25set_system_seccomp_filterv"]
     pub safe fn set_system_seccomp_filter();
+
+    /// Apply a seccomp filter that limits setresuid/setresgid to a range of
+    /// [uid_gid_min..uid_gid_max] (for the real-, effective- and super-ids).
+    #[link_name = "_Z32install_setuidgid_seccomp_filterjj"]
+    pub safe fn install_setuidgid_seccomp_filter(uid_gid_min: u32, uid_gid_max: u32);
 }
