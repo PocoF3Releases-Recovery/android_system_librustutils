@@ -30,7 +30,7 @@ cc_defaults {
                 "libstd",
             ],
         },
-        linux_musl: {
+        musl_arm64: {
             whole_static_libs: [
                 "libstd",
             ],
@@ -46,6 +46,11 @@ cc_defaults {
             ],
         },
         darwin_x86_64: {
+            whole_static_libs: [
+                "prebuilt_libstd",
+            ],
+        },
+        musl_x86_64: {
             whole_static_libs: [
                 "prebuilt_libstd",
             ],
