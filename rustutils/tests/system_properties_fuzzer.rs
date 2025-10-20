@@ -15,13 +15,14 @@
 #![allow(missing_docs)]
 #![allow(unused_must_use)]
 #![no_main]
+#![cfg(target_os = "android")]
 
 use libfuzzer_sys::arbitrary::Arbitrary;
 use libfuzzer_sys::fuzz_target;
-use rustutils::system_properties;
+use rustutils::android::system_properties;
 use std::cell::RefCell;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::{fmt, thread, time};
 
 thread_local! {
@@ -44,25 +45,33 @@ enum Property {
 
 impl fmt::Display for Property {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", match self {
-            Property::KeystoreBootLevel => "keystore.boot_level".to_string(),
-            Property::Random { name } => name.to_string(),
-            Property::Unique => COUNTER.with(|counter| {
-                let val = *counter.borrow();
-                *counter.borrow_mut() += 1;
-                format!("unique.fuzz.prop.{val}")
-            }),
-            Property::Writable { prop } => prop.to_string(),
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Property::KeystoreBootLevel => "keystore.boot_level".to_string(),
+                Property::Random { name } => name.to_string(),
+                Property::Unique => COUNTER.with(|counter| {
+                    let val = *counter.borrow();
+                    *counter.borrow_mut() += 1;
+                    format!("unique.fuzz.prop.{val}")
+                }),
+                Property::Writable { prop } => prop.to_string(),
+            }
+        )
     }
 }
 
 impl fmt::Display for WritableProperty {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", match self {
-            WritableProperty::Fuzzer1 => "unique.fuzz.prop".to_string(),
-            WritableProperty::Fuzzer2 => "unique.fuzz.two.prop".to_string(),
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                WritableProperty::Fuzzer1 => "unique.fuzz.prop".to_string(),
+                WritableProperty::Fuzzer2 => "unique.fuzz.two.prop".to_string(),
+            }
+        )
     }
 }
 
@@ -84,7 +93,8 @@ fuzz_target!(|commands: Vec<Command>| {
                 system_properties::write(&prop.to_string(), &value);
             }
             Command::WatcherRead { prop } => {
-                if let Ok(mut watcher) = system_properties::PropertyWatcher::new(&prop.to_string()) {
+                if let Ok(mut watcher) = system_properties::PropertyWatcher::new(&prop.to_string())
+                {
                     watcher.read(|_n, v| Ok(v.to_string()));
                 }
             }

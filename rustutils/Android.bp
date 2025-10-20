@@ -5,12 +5,15 @@ package {
 
 rust_defaults {
     name: "librustutils_defaults",
-    srcs: ["lib.rs"],
+    edition: "2024",
+    srcs: ["src/lib.rs"],
     host_supported: true,
     target: {
         android: {
             rustlibs: [
+                "libbionic_bindgen",
                 "libcutils_bindgen",
+                "libbionic_bindgen",
                 "libsystem_properties_bindgen_sys",
             ],
         },
@@ -140,6 +143,36 @@ rust_bindgen {
     min_sdk_version: "29",
 }
 
+rust_bindgen {
+    name: "libbionic_bindgen",
+    crate_name: "bionic_bindgen",
+    edition: "2024",
+    host_supported: false,
+
+    wrapper_src: "bindgen/bionic.hpp",
+    source_stem: "bindings",
+    header_libs: [
+        "bionic_libc_platform_headers",
+    ],
+    bindgen_flags: [
+        "--default-enum-style rust",
+
+        "--allowlist-function",
+        "android_fdsan_get_error_level",
+        "--allowlist-function",
+        "android_fdsan_set_error_level",
+        "--allowlist-function",
+        "android_mallopt",
+    ],
+    product_available: true,
+    vendor_available: true,
+    apex_available: [
+        "//apex_available:platform",
+        "//apex_available:anyapex",
+    ],
+    min_sdk_version: "29",
+}
+
 rust_test {
     name: "libsystem_properties_bindgen_test",
     srcs: [":libsystem_properties_bindgen"],
@@ -165,7 +198,7 @@ rust_test {
 
 rust_fuzz {
     name: "system_properties_fuzzer",
-    srcs: ["system_properties_fuzzer.rs"],
+    srcs: ["tests/system_properties_fuzzer.rs"],
     rustlibs: [
         "libarbitrary",
         "librustutils",

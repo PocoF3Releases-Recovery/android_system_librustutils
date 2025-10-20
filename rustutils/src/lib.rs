@@ -14,15 +14,8 @@
 
 //! Android rust utilities.
 
-pub mod log;
-
 #[cfg(target_os = "android")]
-pub mod sockets;
-
-#[cfg(target_os = "android")]
-pub mod system_properties;
-
-#[cfg(target_os = "android")]
-pub mod users;
+pub mod android;
 
 pub mod inherited_fd;
+pub mod log;

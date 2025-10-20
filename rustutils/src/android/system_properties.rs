@@ -157,7 +157,7 @@ impl PropertyWatcher {
         // If the property is None, then wait for it to be created. Subsequent waits will
         // skip this step and wait for our specific property to change.
         if self.prop_info.is_none() {
-            return self.wait_for_property_creation_until(None);
+            return self.wait_for_property_creation_until(until);
         }
 
         let remaining_timeout = remaining_time_until(until);
