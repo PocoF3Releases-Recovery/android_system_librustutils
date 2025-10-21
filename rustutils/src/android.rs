@@ -15,6 +15,7 @@
 //! Android-specific functionality
 
 pub mod process;
+pub mod rootdev;
 pub mod sockets;
 mod sys;
 pub mod system_properties;
