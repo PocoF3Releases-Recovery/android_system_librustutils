@@ -42,6 +42,7 @@ use log::Log;
 ///     )
 /// }))
 /// .unwrap_or_else(|e| panic!("{e}"));
+/// log::set_max_level(log::LevelFilter::Trace);
 /// ```
 ///
 /// Or, using `set_boxed_logger`:
@@ -57,6 +58,7 @@ use log::Log;
 ///     ),
 /// )))
 /// .unwrap_or_else(|e| panic!("{e}"));
+/// log::set_max_level(log::LevelFilter::Trace);
 /// ```
 ///
 /// [logger]: log::Log
