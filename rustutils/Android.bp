@@ -19,7 +19,6 @@ rust_defaults {
         },
     },
     rustlibs: [
-        "libanyhow",
         "liblibc",
         "liblog_rust",
         "libnix",
@@ -51,6 +50,7 @@ rust_test {
     test_suites: ["general-tests"],
     auto_gen_config: true,
     rustlibs: [
+        "libanyhow",
         "libtempfile",
     ],
     // Below flags are to run each test function in a separate process which is needed for

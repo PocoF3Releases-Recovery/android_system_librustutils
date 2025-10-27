@@ -44,9 +44,6 @@ pub enum PropertyWatcherError {
     /// read callback gave us a bad C string
     #[error("__system_property_read_callback gave us a non-UTF8 C string")]
     BadCString(#[from] Utf8Error),
-    /// read callback returned an error
-    #[error("Callback failed")]
-    CallbackError(#[from] anyhow::Error),
     /// Failure in setting the system property
     #[error("__system_property_set failed.")]
     SetPropertyFailed,

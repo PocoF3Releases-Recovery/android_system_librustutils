@@ -103,7 +103,7 @@ impl PropertyWatcher {
     /// Returns an error if the property is empty or doesn't exist.
     pub fn read<T, F>(&mut self, mut f: F) -> Result<T>
     where
-        F: FnMut(&str, &str) -> anyhow::Result<T>,
+        F: FnMut(&str, &str) -> T,
     {
         let prop_info = self.get_prop_info().ok_or(PropertyWatcherError::SystemPropertyAbsent)?;
         let mut result = Err(PropertyWatcherError::ReadCallbackNotCalled);
@@ -112,7 +112,7 @@ impl PropertyWatcher {
             result = (|| {
                 let name = name.ok_or(PropertyWatcherError::MissingCString)?.to_str()?;
                 let value = value.ok_or(PropertyWatcherError::MissingCString)?.to_str()?;
-                f(name, value).map_err(PropertyWatcherError::CallbackError)
+                Ok(f(name, value))
             })()
         });
         result
@@ -202,7 +202,7 @@ impl PropertyWatcher {
 
         self.wait_for_property_creation_until(until)?;
 
-        while self.read(|_, value| Ok(value != expected_value))? {
+        while self.read(|_, value| value != expected_value)? {
             self.wait_for_property_change_until(until)?;
         }
 
@@ -214,7 +214,7 @@ impl PropertyWatcher {
 ///
 /// Returns `Ok(None)` if the property doesn't exist.
 pub fn read(name: &str) -> Result<Option<String>> {
-    match PropertyWatcher::new(name)?.read(|_name, value| Ok(value.to_owned())) {
+    match PropertyWatcher::new(name)?.read(|_name, value| value.to_owned()) {
         Ok(value) => Ok(Some(value)),
         Err(PropertyWatcherError::SystemPropertyAbsent) => Ok(None),
         Err(e) => Err(e),

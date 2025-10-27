@@ -95,7 +95,7 @@ fuzz_target!(|commands: Vec<Command>| {
             Command::WatcherRead { prop } => {
                 if let Ok(mut watcher) = system_properties::PropertyWatcher::new(&prop.to_string())
                 {
-                    watcher.read(|_n, v| Ok(v.to_string()));
+                    watcher.read(|_n, v| v.to_string());
                 }
             }
             Command::WatcherWait { value } => {
