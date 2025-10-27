@@ -18,7 +18,7 @@ use std::{ffi::NulError, str::Utf8Error};
 use thiserror::Error;
 
 /// Errors this crate can generate
-#[derive(Debug, Error)]
+#[derive(Clone, Debug, Eq, Error, PartialEq)]
 pub enum PropertyWatcherError {
     /// We can't watch for a property whose name contains a NUL character.
     #[error("Cannot convert name to C string")]
@@ -53,7 +53,7 @@ pub enum PropertyWatcherError {
 pub type Result<T> = std::result::Result<T, PropertyWatcherError>;
 
 /// Errors returned by generated system property accessors.
-#[derive(Debug, Error)]
+#[derive(Clone, Debug, Eq, Error, PartialEq)]
 pub enum SysPropError {
     /// Failed to fetch the system property.
     #[error("Failed to fetch system property: {0}")]
