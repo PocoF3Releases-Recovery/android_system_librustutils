@@ -17,7 +17,6 @@
 
 // Temporary public re-export to avoid breaking dependents.
 pub use self::error::{PropertyWatcherError, Result};
-use anyhow::Context;
 use libc::timespec;
 use std::os::raw::c_char;
 use std::ptr::null;
@@ -260,8 +259,8 @@ pub fn write(name: &str, value: &str) -> Result<()> {
     unsafe {
         // If successful, __system_property_set returns 0, otherwise, returns -1.
         system_properties_bindgen::__system_property_set(
-            CString::new(name).context("Failed to construct CString from name.")?.as_ptr(),
-            CString::new(value).context("Failed to construct CString from value.")?.as_ptr(),
+            CString::new(name).map_err(PropertyWatcherError::BadNameError)?.as_ptr(),
+            CString::new(value).map_err(PropertyWatcherError::BadValueError)?.as_ptr(),
         )
     } == 0
     {
