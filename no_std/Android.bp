@@ -42,17 +42,17 @@ cc_defaults {
         },
         glibc: {
             whole_static_libs: [
-                "prebuilt_linux_glibc_libstd",
+                "prebuilt_libstd",
             ],
         },
         darwin_x86_64: {
             whole_static_libs: [
-                "prebuilt_darwin_libstd",
+                "prebuilt_libstd",
             ],
         },
         musl_x86_64: {
             whole_static_libs: [
-                "prebuilt_linux_musl_libstd",
+                "prebuilt_libstd",
             ],
         },
     },
