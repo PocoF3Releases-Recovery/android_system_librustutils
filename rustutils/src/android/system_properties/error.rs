@@ -14,7 +14,7 @@
 
 //! Errors accessing system properties.
 
-use std::str::Utf8Error;
+use std::{ffi::NulError, str::Utf8Error};
 use thiserror::Error;
 
 /// Errors this crate can generate
@@ -22,7 +22,10 @@ use thiserror::Error;
 pub enum PropertyWatcherError {
     /// We can't watch for a property whose name contains a NUL character.
     #[error("Cannot convert name to C string")]
-    BadNameError(#[from] std::ffi::NulError),
+    BadNameError(#[from] NulError),
+    /// We can't set a system property to a value containing a NUL character.
+    #[error("Cannot convert value to C string")]
+    BadValueError(NulError),
     /// We can only watch for properties that exist when the watcher is created.
     #[error("System property is absent")]
     SystemPropertyAbsent,
