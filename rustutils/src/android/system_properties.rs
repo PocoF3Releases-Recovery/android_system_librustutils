@@ -118,6 +118,17 @@ impl PropertyWatcher {
         result
     }
 
+    /// Reads the current value of this system property.
+    ///
+    /// Returns `Ok(None)` if the property doesn't exist.
+    pub fn read_string(&mut self) -> Result<Option<String>> {
+        match self.read(|_name, value| value.to_owned()) {
+            Ok(value) => Ok(Some(value)),
+            Err(PropertyWatcherError::SystemPropertyAbsent) => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
+
     // Waits for the property that self is watching to be created. Returns immediately if the
     // property already exists.
     fn wait_for_property_creation_until(&mut self, until: Option<Instant>) -> Result<()> {
@@ -214,11 +225,7 @@ impl PropertyWatcher {
 ///
 /// Returns `Ok(None)` if the property doesn't exist.
 pub fn read(name: &str) -> Result<Option<String>> {
-    match PropertyWatcher::new(name)?.read(|_name, value| value.to_owned()) {
-        Ok(value) => Ok(Some(value)),
-        Err(PropertyWatcherError::SystemPropertyAbsent) => Ok(None),
-        Err(e) => Err(e),
-    }
+    PropertyWatcher::new(name)?.read_string()
 }
 
 fn parse_bool(value: &str) -> Option<bool> {
