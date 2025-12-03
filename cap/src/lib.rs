@@ -41,6 +41,8 @@ pub enum CapabilityError {
     DropFailure(Errno),
     #[error("Failed to get capabilities: {0:?}")]
     GetCapFailure(Errno),
+    #[error("Failed to get capability bound: {0:?}")]
+    GetCapBoundFailure(Errno),
     #[error("Failed to set capabilities: {0:?}")]
     SetCapFailure(Errno),
     #[error("Failed to set process capabilities: {0:?}")]
@@ -601,10 +603,13 @@ pub fn cap_drop_bound(cap: Capability) -> Result<()> {
 }
 
 /// Test to see if a capability is within the bounding set
-pub fn cap_within_bound(cap: Capability) -> bool {
-    // SAFETY: This function takes no pointers and return value is converted
-    //         into a Boolean
-    unsafe { cap_bindgen::cap_get_bound(cap as cap_bindgen::cap_value_t) > 0 }
+pub fn cap_within_bound(cap: Capability) -> Result<bool> {
+    // SAFETY: This function takes no pointers and return value is checked and
+    //         wrapped in a `Result<bool>` type.
+    match unsafe { cap_bindgen::cap_get_bound(cap as cap_bindgen::cap_value_t) } {
+        -1 => Err(CapabilityError::GetCapBoundFailure(Errno::last())),
+        ret => Ok(ret > 0),
+    }
 }
 
 /// Returns the maximum capability bit that is defined in `libcap`.  If the
