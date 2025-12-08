@@ -139,6 +139,7 @@ pub unsafe fn fdsan_set_error_level(level: FDSanErrorLevel) -> FDSanErrorLevel {
 
 /// Reset the thread local stack protection salt and then call the provided
 /// continuation.  It is expected that the continuation will never return.
+#[allow(unreachable_code)]
 pub fn reset_stack_guards(continuation: impl FnOnce() -> Infallible) -> Infallible {
     sys::android_reset_stack_guards();
     continuation()
