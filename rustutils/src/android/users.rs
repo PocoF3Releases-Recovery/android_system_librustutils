@@ -14,6 +14,7 @@
 
 //! Provides utilities for Android user ids.
 
+pub use cutils_bindgen::AID_ARTD;
 pub use cutils_bindgen::AID_KEYSTORE;
 pub use cutils_bindgen::AID_ROOT;
 pub use cutils_bindgen::AID_SHELL;

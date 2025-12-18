@@ -124,6 +124,8 @@ rust_bindgen {
         "--allowlist-function",
         "android_get_control_socket",
         "--allowlist-var",
+        "AID_ARTD",
+        "--allowlist-var",
         "AID_KEYSTORE",
         "--allowlist-var",
         "AID_ROOT",
